@@ -59,14 +59,14 @@ echo "Starting the filtering!"
 
 # Filtering
 
-CONTABLES=$( diff ${WORKDIR}/${SAMPLELIST} ${WORKDIR}/${CONTROL} | grep '^<' | cut -d " " -f2 | awk -v healthyname=${HEALTHY} -v chr=${CHR} -v dir=$WORKDIR '{printf "-contamination-table "dir"/"$0".recal.bam_calculatecontamination.table "}' | tr '\n' ' ') 
+CONTABLES=$( diff ${WORKDIR}/${SAMPLELIST} ${WORKDIR}/${CONTROL} | grep '^<' | cut -d " " -f2 | awk -v healthyname=${HEALTHY} -v chr=${CHR} -v dir=$WORKDIR '{printf "-contamination-table "dir"/"$0".recal.bam_calculatecontamination.GATK-4.1.1.0.table "}' | tr '\n' ' ') 
 
 $GATK FilterMutectCalls \
         -V ${WORKDIR}/Mutect2_mseq.${CHR}.${PATIENT}.vcf \
         -O ${WORKDIR}/Mutect2_mseq.${CHR}.${PATIENT}.filtered.vcf \
         -R ${RESDIR}/${REF}.fasta \
 	$CONTABLES \
-        --stats ${WORKDIR}/Mutect2_mseq.${CHR}.vcf.stats
+        --stats ${WORKDIR}/Mutect2_mseq.${CHR}.${PATIENT}.vcf.stats
 
 
 echo "FINISHED"
