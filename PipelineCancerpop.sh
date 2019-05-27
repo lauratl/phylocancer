@@ -79,14 +79,15 @@ echo "SamtoolsDepth.sh Job ID $jid_SamtoolsDepth"  | tee -a ${WORKDIR}/$slurm_in
 ## REMOVING DUPLICATES AND RECALIBRATING (GATK4)
  
 #jid5b=$(sbatch --array=1-${number_samples} --dependency=afterok:$jid4 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
-jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
+#jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
+#jid5b=$(sbatch --array=1,5,11,12,17,21,13,14,15,16,18,19,20,22,23 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 #jid5b=$(sbatch --array=1-10 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 echo "MarkDuplicates.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid_BaseRecalibratorI=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/BaseRecalibratorI.sh $1 | awk '{print $4}')
 echo "BaseRecalibratorI.sh Job ID $jid_BaseRecalibratorI"  | tee -a ${WORKDIR}/$slurm_info/README
 
-#jid_BaseRecalibratorII=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/BaseRecalibratorII.sh $1 | awk '{print $4}')
+#jid_BaseRecalibratorII=$(sbatch --array=1-${number_samples} --dependency=afterok:$jid_BaseRecalibratorI ${SCRIPTDIR}/BaseRecalibratorII.sh $1 | awk '{print $4}')
 echo "BaseRecalibratorII.sh Job ID $jid_BaseRecalibratorII"  | tee -a ${WORKDIR}/$slurm_info/README
 
 
@@ -107,6 +108,17 @@ echo "MuTect2.sh Job ID $jidMuTect2"  | tee -a ${WORKDIR}/$slurm_info/README
 #jid_MuTect2_mseq=$(sbatch --array=2-${nchrs} ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #jid_MuTect2_mseq=$(sbatch --array=10,11,12,13,14,15,16,17,19,1,2,3,4,5,6,7,8,9 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #jid_MuTect2_mseq=$(sbatch --array=1,2 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+#### Each chr the right time  ####
+#jid_MuTect2_mseq_chr1_2=$(sbatch --array=1,2 -t 50:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+#jid_MuTect2_mseq2_chr3_12=$(sbatch --array=3-12 -t 40:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+#jid_MuTect2_mseq3_chr13_25=$(sbatch --array=13-25 -t 30:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+echo "MuTect2_mseq.sh Job ID $jid_MuTect2_mseq_chr1_2 $jid_MuTect2_mseq2_chr3_12 $jid_MuTect2_mseq3_chr13_25"  | tee -a ${WORKDIR}/$slurm_info/README
 echo "MuTect2_mseq.sh Job ID $jid_MuTect2_mseq"  | tee -a ${WORKDIR}/$slurm_info/README
+
+#jid_FilterMutectCalls=$(sbatch --array=1-${nchrs} ${SCRIPTDIR}/FilterMutectCalls.sh $1 | awk '{print $4}')
+jid_FilterMutectCalls=$(sbatch --array=3 ${SCRIPTDIR}/FilterMutectCalls.sh $1 | awk '{print $4}')
+echo "FilterMutectCalls.sh Job ID $jid_FilterMutectCalls"  | tee -a ${WORKDIR}/$slurm_info/README
+
+
 
 echo "PIPELINE LAUNCHED"
