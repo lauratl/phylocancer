@@ -110,14 +110,18 @@ echo "MuTect2.sh Job ID $jidMuTect2"  | tee -a ${WORKDIR}/$slurm_info/README
 #jid_MuTect2_mseq=$(sbatch --array=1,2 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #### Each chr the right time  ####
 #jid_MuTect2_mseq_chr1_2=$(sbatch --array=1,2 -t 50:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
-#jid_MuTect2_mseq2_chr3_12=$(sbatch --array=3-12 -t 40:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
-#jid_MuTect2_mseq3_chr13_25=$(sbatch --array=13-25 -t 30:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+jid_MuTect2_mseq2_chr3_12=$(sbatch --array=3-12 -t 40:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+jid_MuTect2_mseq3_chr13_25=$(sbatch --array=13-25 -t 30:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 echo "MuTect2_mseq.sh Job ID $jid_MuTect2_mseq_chr1_2 $jid_MuTect2_mseq2_chr3_12 $jid_MuTect2_mseq3_chr13_25"  | tee -a ${WORKDIR}/$slurm_info/README
 echo "MuTect2_mseq.sh Job ID $jid_MuTect2_mseq"  | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid_FilterMutectCalls=$(sbatch --array=1-${nchrs} ${SCRIPTDIR}/FilterMutectCalls.sh $1 | awk '{print $4}')
-jid_FilterMutectCalls=$(sbatch --array=3 ${SCRIPTDIR}/FilterMutectCalls.sh $1 | awk '{print $4}')
+#jid_FilterMutectCalls=$(sbatch --array=3 ${SCRIPTDIR}/FilterMutectCalls.sh $1 | awk '{print $4}')
 echo "FilterMutectCalls.sh Job ID $jid_FilterMutectCalls"  | tee -a ${WORKDIR}/$slurm_info/README
+
+
+#jid_GatherVcfs=$(sbatch --array=1 ${SCRIPTDIR}/GatherVcfs.sh $1 | awk '{print $4}')
+echo "GatherVcfs.sh Job ID $jid_GatherVcfs"  | tee -a ${WORKDIR}/$slurm_info/README
 
 
 
