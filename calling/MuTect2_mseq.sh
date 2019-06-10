@@ -6,7 +6,11 @@
 #SBATCH --cpus-per-task 1
 #SBATCH -t 50:00:00
 #SBATCH --mem 50G
-#SBATCH -p thin-shared
+#SBATCH -p shared
+#SBATCH --qos shared
+
+
+#It was -p thin-shared
 
 # Chr1 ~40x 57% 10hours
 # Change to 30h and from shared_short to thin-shared
