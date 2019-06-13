@@ -8,7 +8,7 @@
 #SBATCH --mem 50G
 #SBATCH -p thin-shared,cola-corta
 
-
+#usage Lichee.sh <Config file> [<depth threshold>]
 # Reading config
 
 source ReadConfig.sh $1
@@ -22,10 +22,15 @@ module load jdk/8u181
 
 # Commands
 
+depth=$2
+if [ -z "$depth" ]; then
+depth=0
+fi
+
 LICHEE=/mnt/netapp1/posadalab/APPS/lichee/LICHeE/release/
 cd $LICHEE
 ./lichee -build \
-	-i ${WORKDIR}/${PATIENT}.LicheeInput.table \
+	-i ${WORKDIR}/${PATIENT}.LicheeInput.depth${depth}.table \
 	-sampleProfile \
 	-n 0 \
 	-o ${WORKDIR}/${PATIENT}.Lichee \
