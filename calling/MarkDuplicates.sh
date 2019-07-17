@@ -16,7 +16,7 @@ source ReadConfig.sh $1
 
 # Loading modules
 
-module load picard/2.2.1
+#module load picard/2.2.1
 module load picard/2.18.14 # modified 21/01/2019
 
 

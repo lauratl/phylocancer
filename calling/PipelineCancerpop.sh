@@ -108,10 +108,11 @@ echo "MuTect2.sh Job ID $jidMuTect2"  | tee -a ${WORKDIR}/$slurm_info/README
 #jid_MuTect2_mseq=$(sbatch --array=2-${nchrs} ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #jid_MuTect2_mseq=$(sbatch --array=10,11,12,13,14,15,16,17,19,1,2,3,4,5,6,7,8,9 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #jid_MuTect2_mseq=$(sbatch --array=1,2 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+#jid_MuTect2_mseq=$(sbatch --array=17,19,21 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #### Each chr the right time  ####
-jid_MuTect2_mseq_chr1_2=$(sbatch --array=1,2 -t 50:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
-jid_MuTect2_mseq2_chr3_12=$(sbatch --array=3-12 -t 40:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
-jid_MuTect2_mseq3_chr13_25=$(sbatch --array=13-25 -t 30:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+#jid_MuTect2_mseq_chr1_2=$(sbatch --array=1,2 -t 50:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+#jid_MuTect2_mseq2_chr3_12=$(sbatch --array=3-12 -t 40:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
+#jid_MuTect2_mseq3_chr13_25=$(sbatch --array=13-25 -t 30:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #jid_MuTect2_mseq=$(sbatch --array=23 -t 100:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 #jid_MuTect2_mseq=$(sbatch --array=1-23 -t 60:00:00 ${SCRIPTDIR}/MuTect2_mseq.sh $1 | awk '{print $4}')
 echo "MuTect2_mseq.sh Job ID $jid_MuTect2_mseq_chr1_2 $jid_MuTect2_mseq2_chr3_12 $jid_MuTect2_mseq3_chr13_25"  | tee -a ${WORKDIR}/$slurm_info/README
@@ -124,6 +125,12 @@ echo "FilterMutectCalls.sh Job ID $jid_FilterMutectCalls"  | tee -a ${WORKDIR}/$
 echo "Run MergeMutect2mseqVCFs.sh"
 #jid_GatherVcfs=$(sbatch --array=1 ${SCRIPTDIR}/GatherVcfs.sh $1 | awk '{print $4}')
 #echo "GatherVcfs.sh Job ID $jid_GatherVcfs"  | tee -a ${WORKDIR}/$slurm_info/README
+
+jid_AscatNGS=$(sbatch --array=1-${ntumors} --x11=all ${SCRIPTDIR}/AscatNGS.sh $1 | awk '{print $4}')
+echo "AscatNGS.sh Job ID $jid_AscatNGS"  | tee -a ${WORKDIR}/$slurm_info/README
+
+#jid_Lichee=$(sbatch --array=1 ${SCRIPTDIR}/Lichee.sh $1 | awk '{print $4}')
+echo "Lichee.sh Job ID $jid_Lichee"  | tee -a ${WORKDIR}/$slurm_info/README
 
 
 

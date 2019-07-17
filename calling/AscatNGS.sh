@@ -4,9 +4,9 @@
 #SBATCH --mail-user lauratomaslopezslurm@gmail.com
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
-#SBATCH -t 30:00:00
-#SBATCH --mem 50G
-#SBATCH -p thin-shared
+#SBATCH -t 5:00:00
+#SBATCH --mem 20G
+#SBATCH -p thin-shared,cola-corta
 
 
 # Reading config
@@ -30,19 +30,23 @@ HEALTHY=`head -1 ${WORKDIR}/${CONTROL}`
 
 SNPGC=AscatNgsSnpCorrections.tsv
 GENDER=XX
-mkdir -p ${WORKDIR}/AscatNGS
+mkdir -p ${WORKDIR}/AscatNGS/${TUMOR}
 
 
 time(
 
 ascat.pl \
-    -outdir ${WORKDIR}/AscatNGS \
+    -outdir ${WORKDIR}/AscatNGS/${TUMOR} \
     -tumour ${WORKDIR}/${TUMOR}.recal.bam \
     -normal ${WORKDIR}/${HEALTHY}.recal.bam \
     -reference ${RESDIR}/${REF}.fasta \
     -snp_gc ${RESDIR}/${SNPGC} \
     -protocol WGS \
     -gender ${GENDER} \
+    -platform ILLUMINA \
+    -species Human \
+    -cpus 1 \
+    -assembly b37 \
     -genderChr Y
 
 )

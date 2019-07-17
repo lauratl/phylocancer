@@ -36,7 +36,8 @@ cd $LICHEE
 	-o ${WORKDIR}/${PATIENT}.Lichee \
 	-v \
 	-color \
-	-dot  
+	-dot \
+	-showTree 1 
 
 
 echo "FINISHED"
