@@ -1,12 +1,12 @@
 #!/bin/sh
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH --mail-user lauratomaslopez@gmail.com
+#SBATCH --mail-user lauratomaslopezslurm@gmail.com
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
-#SBATCH -t 24:00:00
-#SBATCH --mem 100G
-#SBATCH -p fatnode,thin-shared
+#SBATCH -t 10:00:00
+#SBATCH --mem 30G
+#SBATCH -p thin-shared
 
 
 

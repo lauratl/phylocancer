@@ -5,8 +5,9 @@
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
 #SBATCH -t 5:00:00
-#SBATCH --mem 20G
-#SBATCH -p thin-shared,cola-corta
+#SBATCH --mem 30G
+#SBATCH -p shared
+#SBATCH --qos shared
 
 
 # Reading config

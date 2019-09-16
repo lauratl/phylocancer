@@ -40,6 +40,7 @@ echo "Using Configuration file $1" >> ${WORKDIR}/$slurm_info/README
 echo "FastQCRaw.sh Job ID $jid0" | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid1=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
+#jid1=$(sbatch --array=24,25 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
 #jid1=$(sbatch --array=11-23 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
 echo "Cutadapt.sh Job ID $jid1" | tee -a ${WORKDIR}/$slurm_info/README
 
@@ -79,7 +80,7 @@ echo "SamtoolsDepth.sh Job ID $jid_SamtoolsDepth"  | tee -a ${WORKDIR}/$slurm_in
 ## REMOVING DUPLICATES AND RECALIBRATING (GATK4)
  
 #jid5b=$(sbatch --array=1-${number_samples} --dependency=afterok:$jid4 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
-#jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
+jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 #jid5b=$(sbatch --array=1,5,11,12,17,21,13,14,15,16,18,19,20,22,23 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 #jid5b=$(sbatch --array=1-10 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 echo "MarkDuplicates.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/README
@@ -126,7 +127,7 @@ echo "Run MergeMutect2mseqVCFs.sh"
 #jid_GatherVcfs=$(sbatch --array=1 ${SCRIPTDIR}/GatherVcfs.sh $1 | awk '{print $4}')
 #echo "GatherVcfs.sh Job ID $jid_GatherVcfs"  | tee -a ${WORKDIR}/$slurm_info/README
 
-jid_AscatNGS=$(sbatch --array=1-${ntumors} --x11=all ${SCRIPTDIR}/AscatNGS.sh $1 | awk '{print $4}')
+#jid_AscatNGS=$(sbatch --array=1-${ntumors} --x11=all ${SCRIPTDIR}/AscatNGS.sh $1 | awk '{print $4}')
 echo "AscatNGS.sh Job ID $jid_AscatNGS"  | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid_Lichee=$(sbatch --array=1 ${SCRIPTDIR}/Lichee.sh $1 | awk '{print $4}')

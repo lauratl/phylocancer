@@ -5,8 +5,8 @@
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
 #SBATCH -t 30:00:00
-#SBATCH --mem 100G
-#SBATCH -p fatnode,thin-shared
+#SBATCH --mem 50G
+#SBATCH -p thin-shared
 
 # Reading config
 
