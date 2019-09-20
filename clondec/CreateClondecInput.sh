@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --mail-user lauratomaslopezslurm@gmail.com
@@ -35,6 +35,9 @@ HEALTHY=`head -1 ${WORKDIR}/${CONTROL}`
 
 echo "Samples are $SAMPLES" >> $LOG
 echo "Healthy sample is $HEALTHY" >>$LOG
+
+
+
 
 
 # Remove variants in non-diploid regions
@@ -100,9 +103,15 @@ echo "Diploid variants: $DIPLOID" >> $LOG
 grep -v '^#' ${WORKDIR}/Clondec/${PATIENT}.diploid.vcf | awk '{print $1"\t"$2-1"\t"$2}' > ${WORKDIR}/Clondec/${PATIENT}.pos.bed
 
 
-## Locate the corresponding bam file
+## Recover from the corresponding bam file
 
-for SAMPLE in $SAMPLES; do
+SAMPLES=($SAMPLES)
+HEALTHY=($HEALTHY)
+
+SAMPLESARRAY=("${SAMPLES[@]}" "${HEALTHY[@]}")
+
+
+for SAMPLE in "${SAMPLESARRAY[@]}"; do
 
 BAMFILE=${WORKDIR}/${SAMPLE}.recal.bam
 
@@ -119,19 +128,25 @@ done
 
 
 
+
+
 # Merge read counts from the different samples
 
-for SAMPLE in $SAMPLES; do
 
-grep -v '^@' ${WORKDIR}/Clondec/${PATIENT}.${SAMPLE}.allelicCounts.tsv | sed "s/COUNT/COUNT_$SAMPLE/g" | awk '{print $1":"$2"\t"$3"\t"$4"\t"$5"\t"$6 }' > ${WORKDIR}/${PATIENT}.${SAMPLE}.Counts.tsv
+
+
+
+
+for SAMPLE in "${SAMPLESARRAY[@]}"; do
+
+grep -v '^@' ${WORKDIR}/Clondec/${PATIENT}.${SAMPLE}.allelicCounts.tsv | sed "s/COUNT/COUNT_$SAMPLE/g" | awk '{print $1":"$2"\t"$3"\t"$4"\t"$5"\t"$6 }' > ${WORKDIR}/Clondec/${PATIENT}.${SAMPLE}.Counts.tsv
 
 done
 
-SAMPLESARRAY=($SAMPLES)
 
 
+for SAMPLE in "${SAMPLESARRAY[@]}"; do
 
-for SAMPLE in $SAMPLES; do
 
 if [ $SAMPLE == ${SAMPLESARRAY[0]} ]; then
 echo ""
@@ -147,6 +162,8 @@ PREVSAMPLE=${SAMPLE}
 fi
 done
 
+
+
 mv ${WORKDIR}/Clondec/${PATIENT}.tmp.${PREVSAMPLE}.Counts ${WORKDIR}/Clondec/${PATIENT}.Counts
 rm ${WORKDIR}/Clondec/${PATIENT}.tmp.*.Counts
 
@@ -159,13 +176,13 @@ echo "Retrieved read counts from  $RETRIEVED variants" >> $LOG
 
 module load gcccore/6.4.0 python/2.7.15
 
-python CreateCDInput_targeted.py \
+python ${SCRIPTDIR/calling/clondec}/CreateClondecInput.py \
 	--input ${WORKDIR}/Clondec/${PATIENT}.Counts \
 	--lichee ${WORKDIR}/Clondec/${PATIENT}.LicheeInput \
 	--cloneFinder ${WORKDIR}/Clondec/${PATIENT}.CloneFinderInput \
 	--healthy "$HEALTHY" \
 	--maxVafIfNotHealthy 0.9 \
-	--minDepth 20 \
+	--minDepth 40 \
 	--minVaf 0.05 \
 	--germlineVaf 0.1
 

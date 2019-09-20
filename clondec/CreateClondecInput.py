@@ -11,7 +11,7 @@ def parseHeader(linea):
 
     for field in linea:
         if field[:9]=="REF_COUNT":
-            samples.append("_".join(field.split("_")[2:5]))
+            samples.append("_".join(field.split("_")[2:]))
 
     return samples
 
@@ -392,6 +392,7 @@ for linea in counts:
 
     if linea[:3]=="CON":
         samples = parseHeader(linea)
+        print samples
     else:
         getMutsInfo(linea)
 
