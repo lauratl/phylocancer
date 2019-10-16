@@ -19,7 +19,10 @@ module load gcc/6.4.0 bwa/0.7.17       # modified 21/01/2019
 
 # Selecting samples
 
-SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+#SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+
+FASTQ=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST}Full | cut -f1)
+SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST}Full | cut -f2)
 
 # Commands
 RG="@RG\\tID:${SAMPLE}\\tSM:${SAMPLE}\\tLB:${LIBRARY}\\tPL:ILLUMINA"

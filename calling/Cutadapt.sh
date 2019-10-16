@@ -19,7 +19,9 @@ module load gcc/6.4.0 cutadapt/1.18-python-2.7.15 #modified 22/01/2019
 
 # Selecting samples
 
-SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+#SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+
+SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST}Full | cut -f1)
 
 # Checking the memory 
 

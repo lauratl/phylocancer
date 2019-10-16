@@ -41,7 +41,7 @@ echo "FastQCRaw.sh Job ID $jid0" | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid1=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
 #jid1=$(sbatch --array=24,25 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
-#jid1=$(sbatch --array=11-23 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
+#jid1=$(sbatch --array=1 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
 echo "Cutadapt.sh Job ID $jid1" | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid2=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/FastQCTrimmed.sh $1 | awk '{print $4}')
@@ -69,18 +69,24 @@ echo "Flagstat.sh Job ID $jid3b" | tee -a ${WORKDIR}/$slurm_info/README
 #jid4=$(sbatch --array=11 ${SCRIPTDIR}/SortSam.sh $1 | awk '{print $4}')
 echo "SortSam.sh Job ID $jid4"  | tee -a ${WORKDIR}/$slurm_info/README
 
-#jid_Genomecov=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/Genomecov.sh $1 | awk '{print $4}')
+jid_Genomecov=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/Genomecov.sh $1 | awk '{print $4}')
 #jid_Genomecov=$(sbatch --array=8 ${SCRIPTDIR}/Genomecov.sh $1 | awk '{print $4}')
 echo "Genomecov.sh Job ID $jid_Genomecov"  | tee -a ${WORKDIR}/$slurm_info/README
 
-#jid_SamtoolsDepth=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/SamtoolsDepth.sh $1 | awk '{print $4}')
+jid_SamtoolsDepth=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/SamtoolsDepth.sh $1 | awk '{print $4}')
 #jid_SamtoolsDepth=$(sbatch --array=8 ${SCRIPTDIR}/SamtoolsDepth.sh $1 | awk '{print $4}')
 echo "SamtoolsDepth.sh Job ID $jid_SamtoolsDepth"  | tee -a ${WORKDIR}/$slurm_info/README
 
 ## REMOVING DUPLICATES AND RECALIBRATING (GATK4)
- 
+
+# for CNAG samples MarkDuplicatesAndMerge.sh
+
+#jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicatesAndMerge.sh $1 | awk '{print $4}')
+echo "MarkDuplicatesAndMerge.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/README
+
+
 #jid5b=$(sbatch --array=1-${number_samples} --dependency=afterok:$jid4 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
-jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
+#jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 #jid5b=$(sbatch --array=1,5,11,12,17,21,13,14,15,16,18,19,20,22,23 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 #jid5b=$(sbatch --array=1-10 ${SCRIPTDIR}/MarkDuplicates.sh $1 | awk '{print $4}')
 echo "MarkDuplicates.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/README
@@ -89,6 +95,7 @@ echo "MarkDuplicates.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/README
 echo "BaseRecalibratorI.sh Job ID $jid_BaseRecalibratorI"  | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid_BaseRecalibratorII=$(sbatch --array=1-${number_samples} --dependency=afterok:$jid_BaseRecalibratorI ${SCRIPTDIR}/BaseRecalibratorII.sh $1 | awk '{print $4}')
+#jid_BaseRecalibratorII=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/BaseRecalibratorII.sh $1 | awk '{print $4}')
 echo "BaseRecalibratorII.sh Job ID $jid_BaseRecalibratorII"  | tee -a ${WORKDIR}/$slurm_info/README
 
 
