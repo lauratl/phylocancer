@@ -3,11 +3,11 @@
 #SBATCH -n 1
 #SBATCH --mail-user lauratomaslopez@gmail.com
 #SBATCH --mail-type FAIL
-#SBATCH --cpus-per-task 8
-#SBATCH -t 40:00:00
-#SBATCH --mem 100G
-#SBATCH -p thinnodes,thin-shared
-
+#SBATCH --cpus-per-task 1 
+#SBATCH -t 6:00:00
+#SBATCH --mem 50G
+#SBATCH -p shared
+#SBATCH --qos shared
 
 # Reading config
 

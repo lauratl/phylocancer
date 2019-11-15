@@ -4,9 +4,9 @@
 #SBATCH --mail-user lauratomaslopezslurm@gmail.com
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 8 
-#SBATCH -t 80:00:00
-#SBATCH --mem 100G
-#SBATCH -p thin-shared,fatnode
+#SBATCH -t 4:00:00
+#SBATCH --mem 50G
+#SBATCH -p thin-shared
 
 # Reading config
 
@@ -25,9 +25,9 @@ FASTQ=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST}Full | cut -f1)
 SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST}Full | cut -f2)
 
 # Commands
-RG="@RG\\tID:${SAMPLE}\\tSM:${SAMPLE}\\tLB:${LIBRARY}\\tPL:ILLUMINA"
+RG="@RG\\tID:${FASTQ}\\tSM:${SAMPLE}\\tLB:${LIBRARY}\\tPL:ILLUMINA"
 
-time(bwa mem -t 8 -M -R ${RG} ${RESDIR}/${REF}.fasta ${WORKDIR}/${SAMPLE}_1.trimmed.fastq.gz ${WORKDIR}/${SAMPLE}_2.trimmed.fastq.gz > ${WORKDIR}/${SAMPLE}.sam)
+time(bwa mem -t 8 -M -R ${RG} ${RESDIR}/${REF}.fasta ${WORKDIR}/${FASTQ}_1.trimmed.fastq.gz ${WORKDIR}/${FASTQ}_2.trimmed.fastq.gz > ${WORKDIR}/${FASTQ}.sam)
 
 
 echo "FINISHED"

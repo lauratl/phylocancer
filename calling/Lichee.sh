@@ -29,15 +29,17 @@ fi
 
 LICHEE=/mnt/netapp1/posadalab/APPS/lichee/LICHeE/release/
 cd $LICHEE
+
+grep -v MT ${WORKDIR}/${PATIENT}.LicheeInput.table > ${WORKDIR}/${PATIENT}.LicheeInput.noMT.table
+
 ./lichee -build \
-	-i ${WORKDIR}/${PATIENT}.LicheeInput.depth${depth}.table \
-	-sampleProfile \
+	-i ${WORKDIR}/${PATIENT}.LicheeInput.noMT.table \
 	-n 0 \
 	-o ${WORKDIR}/${PATIENT}.Lichee \
 	-v \
 	-color \
 	-dot \
-	-showTree 1 
+	-showTree 8 
 
-
+#        -i ${WORKDIR}/${PATIENT}.LicheeInput.depth${depth}.table \
 echo "FINISHED"

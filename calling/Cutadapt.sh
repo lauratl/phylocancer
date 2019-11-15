@@ -4,9 +4,9 @@
 #SBATCH --mail-user lauratomaslopez@gmail.com
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
-#SBATCH -t 30:00:00
-#SBATCH --mem 50G
-#SBATCH -p thin-shared
+#SBATCH -t 5:00:00
+#SBATCH --mem 30G
+#SBATCH -p cola-corta
 
 # Reading config
 

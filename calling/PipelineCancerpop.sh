@@ -10,6 +10,7 @@ source ReadConfig.sh $1
 # Samples and chromosomes counting
 
 number_samples=`wc -l ${WORKDIR}/${SAMPLELIST} | awk '{print $1}'`    # Total number of samples
+number_fastqs=`wc -l ${WORKDIR}/${SAMPLELIST}Full | awk '{print $1}'`    # Number of fastqs (R1 and R2 are one)
 nchrs=`cat ${RESDIR}/${REF}.chrs | wc -l`     # Total number of chromosomes
 ntumors=`diff ${WORKDIR}/${SAMPLELIST} ${WORKDIR}/${CONTROL} | grep '^<'| wc -l`  # Total number of tumor samples
 
@@ -39,6 +40,11 @@ echo "Using Configuration file $1" >> ${WORKDIR}/$slurm_info/README
 #jid0=$(sbatch --array=9,10 ${SCRIPTDIR}/FastQCRaw.sh $1 | awk '{print $4}')
 echo "FastQCRaw.sh Job ID $jid0" | tee -a ${WORKDIR}/$slurm_info/README
 
+#jid1=$(sbatch --array=1-${number_fastqs} ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
+#jid1=$(sbatch --array=9-16 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
+#jid1=$(sbatch --array=9-24 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
+#jid1=$(sbatch --array=9-32 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
+#jid1=$(sbatch --array=1-8 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
 #jid1=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
 #jid1=$(sbatch --array=24,25 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
 #jid1=$(sbatch --array=1 ${SCRIPTDIR}/Cutadapt.sh $1 | awk '{print $4}')
@@ -50,6 +56,8 @@ echo "FastQCTrimmed.sh Job ID $jid2" | tee -a ${WORKDIR}/$slurm_info/README
 
 ## MAPPING, SORTING AND STATS
 
+#jid3=$(sbatch --array=1-${number_fastqs} ${SCRIPTDIR}/BWA.sh $1 | awk '{print $4}')
+#jid3=$(sbatch --array=1-8 ${SCRIPTDIR}/BWA.sh $1 | awk '{print $4}')
 #jid3=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/BWA.sh $1 | awk '{print $4}')
 #jid3=$(sbatch --array=11-23 ${SCRIPTDIR}/BWA.sh $1 | awk '{print $4}')
 #jid3=$(sbatch --array=23 ${SCRIPTDIR}/BWA.sh $1 | awk '{print $4}')
@@ -62,6 +70,8 @@ echo "BWA.sh Job ID $jid3"  | tee -a ${WORKDIR}/$slurm_info/README
 #jid3b=$(sbatch --array=1,2,3,4,5,6,7,9,10 ${SCRIPTDIR}/Flagstat.sh $1 | awk '{print $4}')
 echo "Flagstat.sh Job ID $jid3b" | tee -a ${WORKDIR}/$slurm_info/README
 
+#jid4=$(sbatch --array=1-${number_fastqs} ${SCRIPTDIR}/SortSam.sh $1 | awk '{print $4}')
+#jid4=$(sbatch --array=1-8 --dependency=afterok:3312026 ${SCRIPTDIR}/SortSam.sh $1 | awk '{print $4}')
 #jid4=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/SortSam.sh $1 | awk '{print $4}')
 #jid4=$(sbatch --array=1-${number_samples} --dependency=afterok:$jid3 ${SCRIPTDIR}/SortSam.sh $1 | awk '{print $4}')
 #jid4=$(sbatch --array=1,5 ${SCRIPTDIR}/SortSam.sh $1 | awk '{print $4}')
@@ -69,11 +79,11 @@ echo "Flagstat.sh Job ID $jid3b" | tee -a ${WORKDIR}/$slurm_info/README
 #jid4=$(sbatch --array=11 ${SCRIPTDIR}/SortSam.sh $1 | awk '{print $4}')
 echo "SortSam.sh Job ID $jid4"  | tee -a ${WORKDIR}/$slurm_info/README
 
-jid_Genomecov=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/Genomecov.sh $1 | awk '{print $4}')
+#jid_Genomecov=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/Genomecov.sh $1 | awk '{print $4}')
 #jid_Genomecov=$(sbatch --array=8 ${SCRIPTDIR}/Genomecov.sh $1 | awk '{print $4}')
 echo "Genomecov.sh Job ID $jid_Genomecov"  | tee -a ${WORKDIR}/$slurm_info/README
 
-jid_SamtoolsDepth=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/SamtoolsDepth.sh $1 | awk '{print $4}')
+#jid_SamtoolsDepth=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/SamtoolsDepth.sh $1 | awk '{print $4}')
 #jid_SamtoolsDepth=$(sbatch --array=8 ${SCRIPTDIR}/SamtoolsDepth.sh $1 | awk '{print $4}')
 echo "SamtoolsDepth.sh Job ID $jid_SamtoolsDepth"  | tee -a ${WORKDIR}/$slurm_info/README
 
@@ -82,6 +92,8 @@ echo "SamtoolsDepth.sh Job ID $jid_SamtoolsDepth"  | tee -a ${WORKDIR}/$slurm_in
 # for CNAG samples MarkDuplicatesAndMerge.sh
 
 #jid5b=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/MarkDuplicatesAndMerge.sh $1 | awk '{print $4}')
+#jid5b=$(sbatch --array=1 ${SCRIPTDIR}/MarkDuplicatesAndMerge.sh $1 | awk '{print $4}')
+#jid5b=$(sbatch --array=2 ${SCRIPTDIR}/MarkDuplicatesAndMerge.sh $1 | awk '{print $4}')
 echo "MarkDuplicatesAndMerge.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/README
 
 
@@ -92,9 +104,11 @@ echo "MarkDuplicatesAndMerge.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/
 echo "MarkDuplicates.sh Job ID $jid5b"  | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid_BaseRecalibratorI=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/BaseRecalibratorI.sh $1 | awk '{print $4}')
+#jid_BaseRecalibratorI=$(sbatch --array=2 ${SCRIPTDIR}/BaseRecalibratorI.sh $1 | awk '{print $4}')
 echo "BaseRecalibratorI.sh Job ID $jid_BaseRecalibratorI"  | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid_BaseRecalibratorII=$(sbatch --array=1-${number_samples} --dependency=afterok:$jid_BaseRecalibratorI ${SCRIPTDIR}/BaseRecalibratorII.sh $1 | awk '{print $4}')
+#jid_BaseRecalibratorII=$(sbatch --array=2 --dependency=afterok:$jid_BaseRecalibratorI ${SCRIPTDIR}/BaseRecalibratorII.sh $1 | awk '{print $4}')
 #jid_BaseRecalibratorII=$(sbatch --array=1-${number_samples} ${SCRIPTDIR}/BaseRecalibratorII.sh $1 | awk '{print $4}')
 echo "BaseRecalibratorII.sh Job ID $jid_BaseRecalibratorII"  | tee -a ${WORKDIR}/$slurm_info/README
 
@@ -130,9 +144,15 @@ echo "MuTect2_mseq.sh Job ID $jid_MuTect2_mseq"  | tee -a ${WORKDIR}/$slurm_info
 #jid_FilterMutectCalls=$(sbatch --array=3 ${SCRIPTDIR}/FilterMutectCalls.sh $1 | awk '{print $4}')
 echo "FilterMutectCalls.sh Job ID $jid_FilterMutectCalls"  | tee -a ${WORKDIR}/$slurm_info/README
 
+#${SCRIPTDIR}/MergeMutect2mseqVCFs.sh $1
 echo "Run MergeMutect2mseqVCFs.sh"
+
+
 #jid_GatherVcfs=$(sbatch --array=1 ${SCRIPTDIR}/GatherVcfs.sh $1 | awk '{print $4}')
 #echo "GatherVcfs.sh Job ID $jid_GatherVcfs"  | tee -a ${WORKDIR}/$slurm_info/README
+
+#jid_HaplotypeCaller=$(sbatch --array=1 ${SCRIPTDIR}/HaplotypeCaller.sh $1 | awk '{print $4}')
+echo "HaplotypeCaller.sh Job ID $jid_HaplotypeCaller"  | tee -a ${WORKDIR}/$slurm_info/README
 
 #jid_AscatNGS=$(sbatch --array=1-${ntumors} --x11=all ${SCRIPTDIR}/AscatNGS.sh $1 | awk '{print $4}')
 echo "AscatNGS.sh Job ID $jid_AscatNGS"  | tee -a ${WORKDIR}/$slurm_info/README
