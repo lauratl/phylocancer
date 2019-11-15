@@ -64,7 +64,7 @@ done
 module load gatk/4.1.1.0
 
 gatk SelectVariants \
-        -V ${WORKDIR}/${PATIENT}.vcf \
+        -V ${WORKDIR}/${PATIENT}.PASS.vcf \
         -R ${RESDIR}/${REF}.fasta \
         --select-type-to-include SNP \
 		--restrict-alleles-to BIALLELIC \
