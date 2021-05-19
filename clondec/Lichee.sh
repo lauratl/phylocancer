@@ -29,13 +29,13 @@ LICHEE=/mnt/netapp1/posadalab/APPS/lichee/LICHeE/release/
 
 cd $LICHEE
 ./lichee -build \
-	-i ${WORKDIR}/Clondec/${PATIENT}.LicheeInput \
-	-minVAFPresent 0.05 \
-	-maxVAFAbsent 0.04 \
+	-i ${WORKDIR}/Clondec/${PATIENT}.LicheeInput.noMT \
+	-minVAFPresent 0.25 \
+	-maxVAFAbsent 0.01 \
 	-maxVAFValid 0.6 \
-	-maxClusterDist 0.2 \
-	-e 0.1  \
-	-minClusterSize 30 \
+	-maxClusterDist 0.05 \
+	-e 0.05  \
+	-minClusterSize 100 \
 	-n 0 \
 	-o ${WORKDIR}/Clondec/${PATIENT}.Lichee \
 	-v \

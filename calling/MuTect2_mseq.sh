@@ -1,10 +1,10 @@
 #!/bin/sh
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH --mail-user lauratomaslopez@gmail.com
+#SBATCH --mail-user lauratomaslopezslurm@gmail.com
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
-#SBATCH -t 50:00:00
+#SBATCH -t 48:00:00
 #SBATCH --mem 50G
 #SBATCH -p shared
 #SBATCH --qos shared
@@ -45,7 +45,12 @@ HEALTHY=`head -1 ${WORKDIR}/${CONTROL}`
 
 GERMRES=${RESDIR}/af-only-gnomad.raw.sites.b37.vcf.gz
 
+
+
+
+
 time(
+
 $GATK --java-options "-Xmx8g" Mutect2 \
 	-R ${RESDIR}/${REF}.fasta \
         ${SAMPLES} \
@@ -56,14 +61,17 @@ $GATK --java-options "-Xmx8g" Mutect2 \
 	-O ${WORKDIR}/Mutect2_mseq.${CHR}.${PATIENT}.vcf \
 	-bamout ${WORKDIR}/Mutect2_mseq.${CHR}.bamout \
         -pon ${RESDIR}/PON.${LIBRARY}.vcf \
+
 )
+
+
 
 echo "Finished calling!"
 echo "Starting the filtering!"
 
 # Filtering
 
-CONTABLES=$( diff ${WORKDIR}/${SAMPLELIST} ${WORKDIR}/${CONTROL} | grep '^<' | cut -d " " -f2 | awk -v healthyname=${HEALTHY} -v chr=${CHR} -v dir=$WORKDIR '{printf "-contamination-table "dir"/"$0".recal.bam_calculatecontamination.GATK-4.1.1.0.table "}' | tr '\n' ' ') 
+CONTABLES=$( diff ${WORKDIR}/${SAMPLELIST} ${WORKDIR}/${CONTROL} | grep '^<' | cut -d " " -f2 | awk -v healthyname=${HEALTHY} -v chr=${CHR} -v dir=$WORKDIR '{printf "-contamination-table "dir"/"$0".recal.bam_calculatecontamination.GATK-4.1.3.0.table "}' | tr '\n' ' ') 
 
 $GATK FilterMutectCalls \
         -V ${WORKDIR}/Mutect2_mseq.${CHR}.${PATIENT}.vcf \

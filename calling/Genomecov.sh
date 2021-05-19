@@ -4,9 +4,10 @@
 #SBATCH --mail-user lauratomaslopezslurm@gmail.com
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
-#SBATCH -t 30:00:00
-#SBATCH --mem 100G
-#SBATCH -p fatnode,thin-shared
+#SBATCH -t 10:00:00
+#SBATCH --mem 30G
+#SBATCH -p amd-shared
+#SBATCH --qos amd-shared
 
 
 # Reading config
@@ -26,7 +27,9 @@ module load cesga/2018 gcccore/6.4.0 bedtools/2.27.1 # modified 21/01/2019
 
 
 
-SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+#SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${CONTROL})
+
 
 # Selecting auxiliar files
 
@@ -39,8 +42,8 @@ SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
 
 # Commands
 
-time(bedtools genomecov -ibam ${WORKDIR}/${SAMPLE}.sorted.bam -g ${RESDIR}/${REF}.fasta > ${WORKDIR}/${SAMPLE}.genomecov)
-
+#time(bedtools genomecov -ibam ${WORKDIR}/${SAMPLE}.sorted.bam -g ${RESDIR}/${REF}.fasta > ${WORKDIR}/${SAMPLE}.genomecov)
+time(bedtools genomecov -ibam ${WORKDIR}/${SAMPLE}.recal.bam -g ${RESDIR}/${REF}.fasta > ${WORKDIR}/${SAMPLE}.recal.genomecov)
 
 echo "FINISHED"
 

@@ -16,13 +16,10 @@ source ReadConfig.sh $1
 
 # Loading modules
 
-#module load gatk/4.0.0.0
-#module load gatk/4.0.10.0 # modified 21/01/2019
+module load miniconda2
 
-# Changed 20/05/2019 due to incompatibilities of CalculateContamination output with the new FilterMutectCalls:
-module load jdk/8u181  
-#GATK=/mnt/netapp1/posadalab/APPS/gatk-4.1.1.0/gatk
-GATK=/mnt/netapp1/posadalab/APPS/gatk-4.1.3.0/gatk # to allow matched normal sample
+conda activate /mnt/netapp2/Store_uni/home/uvi/be/ltl/CONDA_ENVIRONMENTS/sequenza_laura
+
 
 # Selecting samples  (this selection by chromosome is for mutect2, not for this script)
 
@@ -42,18 +39,16 @@ HEALTHY=`head -1 ${WORKDIR}/${CONTROL}`
 
 time(
 
-$GATK GetPileupSummaries \
--I ${WORKDIR}/${TUMOR}.recal.bam \
--V ${RESDIR}/small_exac_common_3_b37.vcf.gz \
---intervals ${RESDIR}/b37.bed \
--output ${WORKDIR}/${TUMOR}.recal.bam_getpileupsummaries.GATK-4.1.3.0.table
 
-$GATK CalculateContamination \
--I ${WORKDIR}/${TUMOR}.recal.bam_getpileupsummaries.GATK-4.1.3.0.table \
--O ${WORKDIR}/${TUMOR}.recal.bam_calculatecontamination.GATK-4.1.3.0.table \
--matched ${WORKDIR}/${HEALTHY}.recal.bam_getpileupsummaries.GATK-4.1.3.0.table
+sequenza-utils bam2seqz \
+	-n ${WORKDIR}/$HEALTHY.recal.bam \
+	-t ${WORKDIR}/$TUMOR.recal.bam \
+	--fasta ${RESDIR}/${REF}.fasta \
+	-gc ${RESDIR}/${REF}.gc50Base.wig.gz \
+	-o ${WORKDIR}/${TUMOR}.out.seqz.gz 
+
 
 )
 
 
-echo "FINISHED"
+

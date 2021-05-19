@@ -5,7 +5,7 @@
 #SBATCH --mail-type FAIL
 #SBATCH --cpus-per-task 1
 #SBATCH -t 10:00:00
-#SBATCH --mem 100G
+#SBATCH --mem 30G
 #SBATCH -p cola-corta
 
 # Reading config
@@ -22,12 +22,14 @@ module load gcc/6.4.0 samtools/1.9   # modified 21/01/2019
 
 # Selecting samples
 
-SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+#SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${CONTROL})
+
 
 # Commands
 
-time(samtools depth ${WORKDIR}/${SAMPLE}.sorted.bam > ${WORKDIR}/${SAMPLE}.sorted.bam.depth)
-
+#time(samtools depth ${WORKDIR}/${SAMPLE}.sorted.bam > ${WORKDIR}/${SAMPLE}.sorted.bam.depth)
+time(samtools depth ${WORKDIR}/${SAMPLE}.recal.bam > ${WORKDIR}/${SAMPLE}.recal.bam.depth)
 
 echo "FINISHED"
 

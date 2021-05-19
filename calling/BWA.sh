@@ -6,7 +6,8 @@
 #SBATCH --cpus-per-task 8 
 #SBATCH -t 4:00:00
 #SBATCH --mem 50G
-#SBATCH -p thin-shared
+#SBATCH -p shared
+#SBATCH --qos shared 
 
 # Reading config
 
@@ -19,8 +20,11 @@ module load gcc/6.4.0 bwa/0.7.17       # modified 21/01/2019
 
 # Selecting samples
 
+# Uncomment for one fastq per sample:
 #SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST})
+#FASTQ=$SAMPLE
 
+# Uncomment for several fastq per sample:
 FASTQ=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST}Full | cut -f1)
 SAMPLE=$(sed "${SLURM_ARRAY_TASK_ID}q;d" ${WORKDIR}/${SAMPLELIST}Full | cut -f2)
 
